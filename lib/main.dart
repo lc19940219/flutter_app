@@ -9,6 +9,7 @@ class DemoApp extends StatelessWidget {
     return MaterialApp(
       title: "Flutter_jd",
       initialRoute: "/",
+      //Test
       onGenerateRoute: onGenerateRoute,
       theme: ThemeData(primaryColor: Colors.blue),
       debugShowCheckedModeBanner: false,
