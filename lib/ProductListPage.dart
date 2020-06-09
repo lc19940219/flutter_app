@@ -27,7 +27,7 @@ class _ProductListPageState extends State<ProductListPage> {
   var hasMore = true;
   ScrollController _scrollController;
   List testList = ["333", "555", "666"];
-
+  var _keywords;
   List _subHeaderList = [
     {
       "id": 1,
@@ -43,6 +43,7 @@ class _ProductListPageState extends State<ProductListPage> {
   var _selectHeaderId = 1;
   var flag = true;
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  var api;
 
   @override
   void initState() {
@@ -85,8 +86,13 @@ class _ProductListPageState extends State<ProductListPage> {
                       Radius.circular(ScreenAdapter.setWidth(35)),
                     ),
                     borderSide: BorderSide.none),
-                suffixIcon:
-                    IconButton(icon: Icon(Icons.close), onPressed: () {})),
+                suffixIcon: IconButton(
+                    icon: Icon(Icons.close),
+                    onPressed: () {
+                      this._textEditextcController.text = "";
+                      this._keywords = "";
+                      this._selectHeaderId = 1;
+                    })),
           ),
         ),
         actions: <Widget>[
@@ -156,7 +162,8 @@ class _ProductListPageState extends State<ProductListPage> {
                               color: this._selectHeaderId == value["id"]
                                   ? Colors.red
                                   : Colors.black54),
-                        )
+                        ),
+                        _showIcon(value["id"])
                       ],
                     ),
                   )),
@@ -249,15 +256,20 @@ class _ProductListPageState extends State<ProductListPage> {
               controller: _scrollController,
             ),
           )
-        : Text("222");
+        : LoadingWidget();
   }
 
   void _getProductListData() async {
     setState(() {
       this.flag = false;
     });
-    var api =
-        '${ApiManager.api}api/plist?cid=${widget.arguments["id"]}&page=${this._page}&sort=${this._sort}&pageSize=${this._pageSize}';
+    if (this._keywords == null) {
+      api =
+          '${ApiManager.api}api/plist?cid=${widget.arguments["id"]}&page=${this._page}&sort=${this._sort}&pageSize=${this._pageSize}';
+    } else {
+      api =
+          '${ApiManager.api}api/plist?search=${this._keywords}&page=${this._page}&sort=${this._sort}&pageSize=${this._pageSize}';
+    }
     var response = await Dio().get(api);
 
     var list = ProductModel.fromJson(response.data);
@@ -317,5 +329,17 @@ class _ProductListPageState extends State<ProductListPage> {
       });
     }
     this._getProductListData();
+  }
+
+  _showIcon(value) {
+    if (value == 2 || value == 3) {
+      if (this._subHeaderList[value - 1]["sort"] == 1) {
+        return Icon(Icons.arrow_drop_up);
+      } else {
+        return Icon(Icons.arrow_drop_down);
+      }
+    } else {
+      return Text("");
+    }
   }
 }
