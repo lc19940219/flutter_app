@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutterapp/ProductContent.dart';
 import 'package:flutterapp/pages/Tabs.dart';
 
 import 'ProductListPage.dart';
@@ -7,6 +8,8 @@ final routes = {
   "/": (context) => Tabs(),
   "/ProductListPage": (context, {arguments}) =>
       ProductListPage(arguments: arguments),
+  "/ProductContent": (context, {arguments}) =>
+      ProductContent(arguments: arguments),
 };
 
 Route<dynamic> Function(RouteSettings settings) onGenerateRoute =
