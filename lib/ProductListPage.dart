@@ -66,84 +66,85 @@ class _ProductListPageState extends State<ProductListPage> {
   Widget build(BuildContext context) {
     ScreenAdapter.init(context);
     return Scaffold(
-      key: this._scaffoldKey,
-      appBar: AppBar(
-        title: Container(
-          height: ScreenAdapter.setHeight(70),
-          decoration: BoxDecoration(
-              borderRadius:
-                  BorderRadius.all(Radius.circular(ScreenAdapter.setWidth(35))),
-              color: Color.fromRGBO(233, 233, 233, 0.8)),
-          child: TextField(
-            controller: this._textEditextcController,
-            onChanged: (str) {
-              setState(() {
-                this._keywords = str;
-              });
-            },
-            autofocus: false,
-            decoration: InputDecoration(
-                hintText: "请输入",
-                contentPadding: EdgeInsets.fromLTRB(ScreenAdapter.setWidth(30),
-                    ScreenAdapter.setWidth(30), 0, 0),
-                border: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(ScreenAdapter.setWidth(35)),
-                    ),
-                    borderSide: BorderSide.none),
-                suffixIcon: IconButton(
-                    icon: Icon(Icons.close),
-                    onPressed: () {
-                      setState(() {
+        key: this._scaffoldKey,
+        appBar: AppBar(
+          title: Container(
+            height: ScreenAdapter.setHeight(70),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(
+                    Radius.circular(ScreenAdapter.setWidth(35))),
+                color: Color.fromRGBO(233, 233, 233, 0.8)),
+            child: TextField(
+              controller: this._textEditextcController,
+              onChanged: (str) {
+                setState(() {
+                  this._keywords = str;
+                });
+              },
+              autofocus: false,
+              decoration: InputDecoration(
+                  hintText: "请输入",
+                  contentPadding: EdgeInsets.fromLTRB(
+                      ScreenAdapter.setWidth(30),
+                      ScreenAdapter.setWidth(30),
+                      0,
+                      0),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(ScreenAdapter.setWidth(35)),
+                      ),
+                      borderSide: BorderSide.none),
+                  suffixIcon: IconButton(
+                      icon: Icon(Icons.close),
+                      onPressed: () {
+                        // setState(() {
                         this._textEditextcController.text = "";
                         this._keywords = "";
-                        this._selectHeaderId = 1;
-
-                      });
-                      this._getProductListData();
-                    })),
+                        //this._selectHeaderId = 1;
+                        this._subHeaderChange(1);
+                        FocusScope.of(context).requestFocus(FocusNode());
+//                      });
+//                      this._getProductListData();
+                      })),
+            ),
           ),
-        ),
-        actions: <Widget>[
-          InkWell(
-            onTap: () {
-              SearchServices.setHistoryData(this._keywords);
-              this._subHeaderChange(1);
-              FocusScope.of(context).requestFocus(FocusNode());
-            },
-            child: Container(
-              height: ScreenAdapter.setHeight(70),
-              padding: EdgeInsets.only(right: ScreenAdapter.setWidth(20)),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Text(
-                    "搜索",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: ScreenAdapter.size(28)),
-                  )
-                ],
+          actions: <Widget>[
+            InkWell(
+              onTap: () {
+                SearchServices.setHistoryData(this._keywords);
+                this._subHeaderChange(1);
+                FocusScope.of(context).requestFocus(FocusNode());
+              },
+              child: Container(
+                height: ScreenAdapter.setHeight(70),
+                padding: EdgeInsets.only(right: ScreenAdapter.setWidth(20)),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text(
+                      "搜索",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: ScreenAdapter.size(28)),
+                    )
+                  ],
+                ),
               ),
-            ),
-          )
-        ],
-      ),
-      endDrawer: Drawer(
-        child: Text("筛选"),
-      ),
-      body: this.hasData
-          ? Stack(
-              children: <Widget>[
-                _productListWidget(),
-                _subHeaderWidget(),
-              ],
             )
-          : Center(
-              child: CircularProgressIndicator(
-                strokeWidth: 2,
-              ),
-            ),
-    );
+          ],
+        ),
+        endDrawer: Drawer(
+          child: Text("筛选"),
+        ),
+        body: this.hasData
+            ? Stack(
+                children: <Widget>[
+                  _productListWidget(),
+                  _subHeaderWidget(),
+                ],
+              )
+            : Center(
+                child: Text("暂无数据"),
+              ));
   }
 
   _subHeaderWidget() {
@@ -201,72 +202,77 @@ class _ProductListPageState extends State<ProductListPage> {
               itemBuilder: (BuildContext context, int index) {
                 String pic = this._productList[index].pic;
                 pic = ApiManager.api + pic.replaceAll("\\", "/");
-                return InkWell(onTap: (){
-                  Navigator.pushNamed(context, "/ProductContent",arguments:{"id": "${this._productList[index].sId}"});
-                },
-                child: Container(
-                  child: Column(
-                    children: <Widget>[
-                      Row(
-                        children: <Widget>[
-                          Container(
-                            width: ScreenAdapter.setWidth(180),
-                            height: ScreenAdapter.setHeight(180),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.all(
-                                  Radius.circular(ScreenAdapter.setWidth(5))),
-                              child: FadeInImage.memoryNetwork(
-                                placeholder: kTransparentImage,
-                                image: pic,
-                                fit: BoxFit.cover,
+                return InkWell(
+                  onTap: () {
+                    Navigator.pushNamed(context, "/ProductContent",
+                        arguments: {"id": "${this._productList[index].sId}"});
+                  },
+                  child: Container(
+                    child: Column(
+                      children: <Widget>[
+                        Row(
+                          children: <Widget>[
+                            Container(
+                              width: ScreenAdapter.setWidth(180),
+                              height: ScreenAdapter.setHeight(180),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.all(
+                                    Radius.circular(ScreenAdapter.setWidth(5))),
+                                child: FadeInImage.memoryNetwork(
+                                  placeholder: kTransparentImage,
+                                  image: pic,
+                                  fit: BoxFit.cover,
+                                ),
                               ),
                             ),
-                          ),
-                          Expanded(
-                              child: Container(
-                                height: ScreenAdapter.setHeight(180),
-                                margin: EdgeInsets.only(left: 10),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: <Widget>[
-                                    Text(
-                                      "${this._productList[index].title}",
-                                      maxLines: 2,
-                                    ),
-                                    Wrap(
-                                      runSpacing: ScreenAdapter.setWidth(10),
-                                      spacing: ScreenAdapter.setWidth(10),
-                                      children: this.testList.map((value) {
-                                        return Container(
-                                          height: ScreenAdapter.setHeight(36),
-                                          margin: EdgeInsets.only(right: 10),
-                                          padding:
-                                          EdgeInsets.fromLTRB(10, 0, 10, 0),
-                                          decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(10),
-                                            color:
-                                            Color.fromRGBO(230, 230, 230, 0.9),
-                                          ),
-                                          child: Text("${value}"),
-                                        );
-                                      }).toList(),
-                                    ),
-                                    Text(
-                                      "￥${this._productList[index].price}",
-                                      style: TextStyle(
-                                          color: Colors.red, fontSize: 16),
-                                    )
-                                  ],
-                                ),
-                              ))
-                        ],
-                      ),
-                      Divider(),
-                      _showLoading(index)
-                    ],
+                            Expanded(
+                                child: Container(
+                              height: ScreenAdapter.setHeight(180),
+                              margin: EdgeInsets.only(left: 10),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: <Widget>[
+                                  Text(
+                                    "${this._productList[index].title}",
+                                    maxLines: 2,
+                                  ),
+                                  Wrap(
+                                    runSpacing: ScreenAdapter.setWidth(10),
+                                    spacing: ScreenAdapter.setWidth(10),
+                                    children: this.testList.map((value) {
+                                      return Container(
+                                        height: ScreenAdapter.setHeight(36),
+                                        margin: EdgeInsets.only(right: 10),
+                                        padding:
+                                            EdgeInsets.fromLTRB(10, 0, 10, 0),
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          color: Color.fromRGBO(
+                                              230, 230, 230, 0.9),
+                                        ),
+                                        child: Text("${value}"),
+                                      );
+                                    }).toList(),
+                                  ),
+                                  Text(
+                                    "￥${this._productList[index].price}",
+                                    style: TextStyle(
+                                        color: Colors.red, fontSize: 16),
+                                  )
+                                ],
+                              ),
+                            ))
+                          ],
+                        ),
+                        Divider(),
+                        _showLoading(index)
+                      ],
+                    ),
                   ),
-                ),);
+                );
               },
               itemCount: this._productList.length,
               controller: _scrollController,
