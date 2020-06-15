@@ -94,10 +94,40 @@ class _ProductContentState extends State<ProductContent> {
                 ? Stack(
                     children: <Widget>[
                       TabBarView(children: <Widget>[
-                        ProductContentFirstPage( this.productContenyList),
-                        ProductContentTwoPage( ),
-                        ProductContentThreePage( )
+                        ProductContentFirstPage(this.productContenyList),
+                        ProductContentTwoPage(),
+                        ProductContentThreePage()
                       ]),
+                      Positioned(
+                        child: Container(
+                          width: MediaQuery.of(context).size.width,
+                          height: ScreenAdapter.setHeight(100),
+                          padding: EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              border: Border(
+                                  top: BorderSide(
+                                      color: Colors.black26, width: 2))),
+                          child: Row(
+                            children: <Widget>[
+                              InkWell(
+                                onTap: () {},
+                                child: Container(
+                                  width: ScreenAdapter.setWidth(120),
+                                  height: ScreenAdapter.setHeight(100),
+                                  child: Column(
+                                    children: <Widget>[
+                                      Icon(Icons.shopping_cart),
+                                      Text("购物车")
+                                    ],
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                        bottom: 0,
+                      )
                     ],
                   )
                 : LoadingWidget()));

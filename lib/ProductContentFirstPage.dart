@@ -57,7 +57,7 @@ class _ProductContentFirstPageState extends State<ProductContentFirstPage>
           Container(
             padding: EdgeInsets.only(top: 10),
             child: Text(
-              "${this._productContent.title}",
+              "${this._productContent.subTitle}",
               style: TextStyle(
                   color: Colors.black54, fontSize: ScreenAdapter.size(26)),
               maxLines: 2,
@@ -71,12 +71,12 @@ class _ProductContentFirstPageState extends State<ProductContentFirstPage>
                 Expanded(
                   child: Row(
                     children: <Widget>[
-                      Text("特价",
+                      Text("特价:",
                           style: TextStyle(
                               color: Colors.black87,
-                              fontSize: ScreenAdapter.size(20))),
+                              fontSize: ScreenAdapter.size(28))),
                       Text(
-                        "${this._productContent.price}",
+                        " ￥${this._productContent.price}",
                         style: TextStyle(
                             color: Colors.red,
                             fontSize: ScreenAdapter.size(30)),
@@ -89,12 +89,12 @@ class _ProductContentFirstPageState extends State<ProductContentFirstPage>
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: <Widget>[
-                      Text("原价",
+                      Text("原价:",
                           style: TextStyle(
                               color: Colors.black87,
-                              fontSize: ScreenAdapter.size(20))),
+                              fontSize: ScreenAdapter.size(28))),
                       Text(
-                        "${this._productContent.oldPrice}",
+                        " ￥${this._productContent.oldPrice}",
                         style: TextStyle(
                             color: Colors.red,
                             fontSize: ScreenAdapter.size(30),
