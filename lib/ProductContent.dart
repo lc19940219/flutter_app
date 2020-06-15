@@ -94,9 +94,9 @@ class _ProductContentState extends State<ProductContent> {
                 ? Stack(
                     children: <Widget>[
                       TabBarView(children: <Widget>[
-                        ProductContentFirstPage(),
-                        ProductContentTwoPage(),
-                        ProductContentThreePage()
+                        ProductContentFirstPage( this.productContenyList),
+                        ProductContentTwoPage( ),
+                        ProductContentThreePage( )
                       ]),
                     ],
                   )
