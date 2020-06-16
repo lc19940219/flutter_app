@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterapp/ApiManager.dart';
+import 'package:flutterapp/JDButton.dart';
 import 'package:flutterapp/LoadingWidget.dart';
 import 'file:///F:/flutter_Test/flutter_app/lib/ProductContentThreePage.dart';
 import 'package:flutterapp/service/ScreenAdapter.dart';
@@ -101,13 +102,12 @@ class _ProductContentState extends State<ProductContent> {
                       Positioned(
                         child: Container(
                           width: MediaQuery.of(context).size.width,
-                          height: ScreenAdapter.setHeight(100),
+                          height: ScreenAdapter.setHeight(120),
                           padding: EdgeInsets.all(10),
                           decoration: BoxDecoration(
-                              color: Colors.white,
                               border: Border(
                                   top: BorderSide(
-                                      color: Colors.black26, width: 2))),
+                                      color: Colors.black26, width: 1))),
                           child: Row(
                             children: <Widget>[
                               InkWell(
@@ -117,10 +117,29 @@ class _ProductContentState extends State<ProductContent> {
                                   height: ScreenAdapter.setHeight(100),
                                   child: Column(
                                     children: <Widget>[
-                                      Icon(Icons.shopping_cart),
+                                      Icon(
+                                        Icons.shopping_cart,
+                                        size: 23,
+                                      ),
                                       Text("购物车")
                                     ],
                                   ),
+                                ),
+                              ),
+                              Expanded(
+                                flex: 1,
+                                child: JDButton(
+                                  color: Colors.yellow,
+                                  str: "加入购物车",
+                                  fun: () {},
+                                ),
+                              ),
+                              Expanded(
+                                flex: 1,
+                                child: JDButton(
+                                  color: Colors.red,
+                                  str: "立即购买",
+                                  fun: () {},
                                 ),
                               )
                             ],

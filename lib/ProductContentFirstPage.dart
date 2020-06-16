@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutterapp/JDButton.dart';
 import 'package:flutterapp/service/ScreenAdapter.dart';
 import 'package:transparent_image/transparent_image.dart';
 
@@ -26,6 +28,74 @@ class _ProductContentFirstPageState extends State<ProductContentFirstPage>
     super.initState();
     this._productContent = this.widget.list[0];
     this._attrList = this.widget.list[0].attr;
+  }
+
+  void _attrBottomSheet() {
+    showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return GestureDetector(
+            onTap: () {
+              return false;
+            },
+            behavior: HitTestBehavior.opaque,
+            child: Stack(
+              children: <Widget>[
+                Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: ScreenAdapter.setHeight(700),
+                  child: Stack(
+                    children: <Widget>[
+                      ListView(
+                        children: <Widget>[
+                          Column(
+                            children: <Widget>[Text("aaa")],
+                          ),
+                        ],
+                      ),
+                      Positioned(
+                        child: Container(
+                          height: ScreenAdapter.setHeight(100),
+                          width: MediaQuery.of(context).size.width,
+                          padding: EdgeInsets.all(5),
+                          decoration: BoxDecoration(
+                              border: Border(
+                                  top: BorderSide(
+                                      color: Colors.black26, width: 1))),
+                          child: Row(
+                            children: <Widget>[
+                              Expanded(
+                                flex: 1,
+                                child: JDButton(
+                                  color: Colors.yellow,
+                                  str: "加入购物车",
+                                  fun: () {
+                                    Navigator.pop(context);
+                                  },
+                                ),
+                              ),
+                              Expanded(
+                                flex: 1,
+                                child: JDButton(
+                                  color: Colors.red,
+                                  str: "立即购买",
+                                  fun: () {
+                                    Navigator.pop(context);
+                                  },
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                        bottom: 0,
+                      )
+                    ],
+                  ),
+                )
+              ],
+            ),
+          );
+        });
   }
 
   @override
@@ -111,7 +181,9 @@ class _ProductContentFirstPageState extends State<ProductContentFirstPage>
               ? Container(
                   height: ScreenAdapter.setHeight(80),
                   child: InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      _attrBottomSheet();
+                    },
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
@@ -157,6 +229,5 @@ class _ProductContentFirstPageState extends State<ProductContentFirstPage>
   }
 
   @override
-  // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;
 }
