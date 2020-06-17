@@ -19,7 +19,7 @@ class ProductContentFirstPage extends StatefulWidget {
 
 class _ProductContentFirstPageState extends State<ProductContentFirstPage>
     with AutomaticKeepAliveClientMixin {
-  List _attrList = [];
+  List<Attr> _attrList = [];
   String _selectedValue;
   ProductContentItem _productContent;
 
@@ -28,73 +28,178 @@ class _ProductContentFirstPageState extends State<ProductContentFirstPage>
     super.initState();
     this._productContent = this.widget.list[0];
     this._attrList = this.widget.list[0].attr;
+    _initAttr();
+  }
+
+  void _initAttr() {
+    var arrtList = this._attrList;
+    for (int i = 0; i < arrtList.length; i++) {
+      for (int j = 0; j < arrtList[i].list.length; j++) {
+        if (j == 0) {
+          arrtList[i]
+              .attrList
+              .add({"title": arrtList[i].list[j], "check": true});
+        } else {
+          arrtList[i]
+              .attrList
+              .add({"title": arrtList[i].list[j], "check": false});
+        }
+      }
+    }
+    setState(() {
+      this._attrList = arrtList;
+    });
+    getCheckValue();
+  }
+
+  void getCheckValue() {
+    var arrt = this._attrList;
+    List str = [];
+    for (int i = 0; i < arrt.length; i++) {
+      for (int j = 0; j < arrt[i].attrList.length; j++) {
+        if (arrt[i].attrList[j]["check"] == true) {
+          str.add(arrt[i].attrList[j]["title"]);
+        }
+      }
+    }
+    String value = str.join(",");
+    setState(() {
+      this._selectedValue = value;
+      this._productContent.selectValue = this._selectedValue;
+    });
+  }
+
+  List<Widget> _getAttrWidget(attrBottomSheetState) {
+    List<Widget> list = [];
+
+    this._attrList.forEach((value) {
+      list.add(Wrap(
+        children: <Widget>[
+          Container(
+            width: ScreenAdapter.setWidth(120),
+            padding: EdgeInsets.only(top: 15),
+            child: Text(
+              "${value.cate}: ",
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+          ),
+          Container(
+            width: ScreenAdapter.setWidth(600),
+            child: Wrap(
+              children: _getAttrItemWidget(value, attrBottomSheetState),
+            ),
+          )
+        ],
+      ));
+    });
+    return list;
+  }
+
+  List<Widget> _getAttrItemWidget(Attr value, attrBottomSheetState) {
+//  List<Widget> list = [];
+
+    return value.attrList.map((attrItems) {
+      return Container(
+        margin: EdgeInsets.all(5),
+        child: InkWell(
+          onTap: () {
+            _changeAttr(value.cate, attrItems['title'], attrBottomSheetState);
+          },
+          child: Chip(
+            label: Text("${attrItems["title"]}"),
+            backgroundColor: attrItems["check"] ? Colors.red : Colors.black26,
+          ),
+        ),
+      );
+    }).toList();
+  }
+
+  _changeAttr(cate, title, attrBottomSheetState) {
+    var attrList = this._attrList;
+    for (int i = 0; i < attrList.length; i++) {
+      if (cate == attrList[i].cate) {
+        for (int j = 0; j < attrList[i].attrList.length; j++) {
+          attrList[i].attrList[j]["check"] = false;
+          if (title == attrList[i].attrList[j]["title"]) {
+            attrList[i].attrList[j]["check"] = true;
+          }
+        }
+      }
+    }
+    attrBottomSheetState(() {
+      this._attrList = attrList;
+    });
+
+    getCheckValue();
   }
 
   void _attrBottomSheet() {
     showModalBottomSheet(
         context: context,
         builder: (context) {
-          return GestureDetector(
-            onTap: () {
-              return false;
-            },
-            behavior: HitTestBehavior.opaque,
-            child: Stack(
-              children: <Widget>[
-                Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: ScreenAdapter.setHeight(700),
-                  child: Stack(
-                    children: <Widget>[
-                      ListView(
-                        children: <Widget>[
-                          Column(
-                            children: <Widget>[Text("aaa")],
-                          ),
-                        ],
-                      ),
-                      Positioned(
-                        child: Container(
-                          height: ScreenAdapter.setHeight(100),
-                          width: MediaQuery.of(context).size.width,
-                          padding: EdgeInsets.all(5),
-                          decoration: BoxDecoration(
-                              border: Border(
-                                  top: BorderSide(
-                                      color: Colors.black26, width: 1))),
-                          child: Row(
-                            children: <Widget>[
-                              Expanded(
-                                flex: 1,
-                                child: JDButton(
-                                  color: Colors.yellow,
-                                  str: "加入购物车",
-                                  fun: () {
-                                    Navigator.pop(context);
-                                  },
-                                ),
-                              ),
-                              Expanded(
-                                flex: 1,
-                                child: JDButton(
-                                  color: Colors.red,
-                                  str: "立即购买",
-                                  fun: () {
-                                    Navigator.pop(context);
-                                  },
-                                ),
-                              )
-                            ],
-                          ),
+          return StatefulBuilder(builder: (context, attrBottomSheetState) {
+            return GestureDetector(
+              onTap: () {
+                return false;
+              },
+              behavior: HitTestBehavior.opaque,
+              child: Stack(
+                children: <Widget>[
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: ScreenAdapter.setHeight(700),
+                    child: Stack(
+                      children: <Widget>[
+                        ListView(
+                          children: <Widget>[
+                            Column(
+                              children: _getAttrWidget(attrBottomSheetState),
+                            ),
+                          ],
                         ),
-                        bottom: 0,
-                      )
-                    ],
-                  ),
-                )
-              ],
-            ),
-          );
+                        Positioned(
+                          child: Container(
+                            height: ScreenAdapter.setHeight(100),
+                            width: MediaQuery.of(context).size.width,
+                            padding: EdgeInsets.all(5),
+                            decoration: BoxDecoration(
+                                border: Border(
+                                    top: BorderSide(
+                                        color: Colors.black26, width: 1))),
+                            child: Row(
+                              children: <Widget>[
+                                Expanded(
+                                  flex: 1,
+                                  child: JDButton(
+                                    color: Colors.yellow,
+                                    str: "加入购物车",
+                                    fun: () {
+                                      Navigator.pop(context);
+                                    },
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 1,
+                                  child: JDButton(
+                                    color: Colors.red,
+                                    str: "立即购买",
+                                    fun: () {
+                                      Navigator.pop(context);
+                                    },
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                          bottom: 0,
+                        )
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            );
+          });
         });
   }
 
