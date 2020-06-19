@@ -1,7 +1,9 @@
 import 'package:dio/dio.dart';
+import 'package:event_bus/event_bus.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterapp/ApiManager.dart';
+import 'package:flutterapp/EventBus.dart';
 import 'package:flutterapp/JDButton.dart';
 import 'package:flutterapp/LoadingWidget.dart';
 import 'file:///F:/flutter_Test/flutter_app/lib/ProductContentThreePage.dart';
@@ -131,7 +133,13 @@ class _ProductContentState extends State<ProductContent> {
                                 child: JDButton(
                                   color: Colors.yellow,
                                   str: "加入购物车",
-                                  fun: () {},
+                                  fun: () {
+                                    if (this.productContenyList[0].attr.length >
+                                        0) {
+                                      eventBus
+                                          .fire(ProductContentEvent("加入购物车"));
+                                    }
+                                  },
                                 ),
                               ),
                               Expanded(

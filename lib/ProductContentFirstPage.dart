@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutterapp/EventBus.dart';
 import 'package:flutterapp/JDButton.dart';
 import 'package:flutterapp/service/ScreenAdapter.dart';
 import 'package:transparent_image/transparent_image.dart';
@@ -22,6 +23,7 @@ class _ProductContentFirstPageState extends State<ProductContentFirstPage>
   List<Attr> _attrList = [];
   String _selectedValue;
   ProductContentItem _productContent;
+  var productevent;
 
   @override
   void initState() {
@@ -29,6 +31,18 @@ class _ProductContentFirstPageState extends State<ProductContentFirstPage>
     this._productContent = this.widget.list[0];
     this._attrList = this.widget.list[0].attr;
     _initAttr();
+    this.productevent = eventBus.on<ProductContentEvent>().listen((event) {
+      if (this._attrList.length > 0) {
+        this._attrBottomSheet();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    this.productevent.cancle;
   }
 
   void _initAttr() {
