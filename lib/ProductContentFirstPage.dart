@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutterapp/CartNum.dart';
 import 'package:flutterapp/EventBus.dart';
 import 'package:flutterapp/JDButton.dart';
 import 'package:flutterapp/service/ScreenAdapter.dart';
@@ -40,7 +41,6 @@ class _ProductContentFirstPageState extends State<ProductContentFirstPage>
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     this.productevent.cancle;
   }
@@ -169,6 +169,18 @@ class _ProductContentFirstPageState extends State<ProductContentFirstPage>
                             Column(
                               children: _getAttrWidget(attrBottomSheetState),
                             ),
+                            Container(
+                              margin: EdgeInsets.all(15),
+                              child: Row(
+                                children: <Widget>[
+                                  Text("数量: ",style: TextStyle(fontWeight: FontWeight.bold),),
+                                  Padding(
+                                    padding: EdgeInsets.only(left: 20),
+                                    child: CartNum(this._productContent),
+                                  )
+                                ],
+                              ),
+                            )
                           ],
                         ),
                         Positioned(
