@@ -1,9 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterapp/CartNum.dart';
+import 'package:flutterapp/CartProvide.dart';
+import 'package:flutterapp/CartService.dart';
 import 'package:flutterapp/EventBus.dart';
 import 'package:flutterapp/JDButton.dart';
 import 'package:flutterapp/service/ScreenAdapter.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:provider/provider.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 import 'ApiManager.dart';
@@ -25,6 +29,7 @@ class _ProductContentFirstPageState extends State<ProductContentFirstPage>
   String _selectedValue;
   ProductContentItem _productContent;
   var productevent;
+  CartProvide cartProvide;
 
   @override
   void initState() {
@@ -173,7 +178,11 @@ class _ProductContentFirstPageState extends State<ProductContentFirstPage>
                               margin: EdgeInsets.all(15),
                               child: Row(
                                 children: <Widget>[
-                                  Text("数量: ",style: TextStyle(fontWeight: FontWeight.bold),),
+                                  Text(
+                                    "数量: ",
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold),
+                                  ),
                                   Padding(
                                     padding: EdgeInsets.only(left: 20),
                                     child: CartNum(this._productContent),
@@ -199,7 +208,17 @@ class _ProductContentFirstPageState extends State<ProductContentFirstPage>
                                   child: JDButton(
                                     color: Colors.yellow,
                                     str: "加入购物车",
-                                    fun: () {
+                                    fun: () async {
+                                      await CartService.add(
+                                          this._productContent);
+
+                                      this.cartProvide.updata();
+                                      Fluttertoast.showToast(
+                                          msg: "加入购物车成功",
+                                          toastLength: Toast.LENGTH_SHORT,
+                                          gravity: ToastGravity.CENTER,
+                                          fontSize: 16.0);
+
                                       Navigator.pop(context);
                                     },
                                   ),
@@ -235,6 +254,7 @@ class _ProductContentFirstPageState extends State<ProductContentFirstPage>
     super.build(context);
     String pic = this._productContent.pic;
     pic = ApiManager.api + pic.replaceAll("\\", "/");
+    this.cartProvide = Provider.of<CartProvide>(context);
     return Container(
       padding: EdgeInsets.all(10),
       child: ListView(

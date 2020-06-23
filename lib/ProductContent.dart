@@ -3,11 +3,16 @@ import 'package:event_bus/event_bus.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterapp/ApiManager.dart';
+import 'package:flutterapp/CartProvide.dart';
+import 'package:flutterapp/CartService.dart';
 import 'package:flutterapp/EventBus.dart';
 import 'package:flutterapp/JDButton.dart';
 import 'package:flutterapp/LoadingWidget.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'Cart.dart';
 import 'file:///F:/flutter_Test/flutter_app/lib/ProductContentThreePage.dart';
 import 'package:flutterapp/service/ScreenAdapter.dart';
+import 'package:provider/provider.dart';
 
 import 'ProductContentFirstPage.dart';
 import 'ProductContentTwoPage.dart';
@@ -43,7 +48,8 @@ class _ProductContentState extends State<ProductContent> {
   @override
   Widget build(BuildContext context) {
     ScreenAdapter.init(context);
-
+    CartProvide cartProvide = Provider.of<CartProvide>(context);
+    Cart cart = Provider.of<Cart>(context);
     return DefaultTabController(
         length: 3,
         child: Scaffold(
@@ -96,17 +102,23 @@ class _ProductContentState extends State<ProductContent> {
             body: this.productContenyList.length > 0
                 ? Stack(
                     children: <Widget>[
-                      TabBarView(children: <Widget>[
-                        ProductContentFirstPage(this.productContenyList),
-                        ProductContentTwoPage(),
-                        ProductContentThreePage()
-                      ]),
+                      TabBarView(
+                        children: <Widget>[
+                          ProductContentFirstPage(this.productContenyList),
+                          ProductContentTwoPage(this.productContenyList),
+                          ProductContentThreePage()
+                        ],
+                        physics: NeverScrollableScrollPhysics(),
+                      ),
                       Positioned(
                         child: Container(
                           width: MediaQuery.of(context).size.width,
                           height: ScreenAdapter.setHeight(120),
                           padding: EdgeInsets.all(10),
+//                          margin: EdgeInsets.only(
+//                              top: ScreenAdapter.setHeight(120)),
                           decoration: BoxDecoration(
+                            color: Colors.white,
                               border: Border(
                                   top: BorderSide(
                                       color: Colors.black26, width: 1))),
@@ -133,11 +145,21 @@ class _ProductContentState extends State<ProductContent> {
                                 child: JDButton(
                                   color: Colors.yellow,
                                   str: "加入购物车",
-                                  fun: () {
+                                  fun: () async {
                                     if (this.productContenyList[0].attr.length >
                                         0) {
                                       eventBus
                                           .fire(ProductContentEvent("加入购物车"));
+                                    } else {
+                                      await CartService.add(
+                                          this.productContenyList[0]);
+                                      cartProvide.updata();
+                                      cart.increment();
+                                      Fluttertoast.showToast(
+                                          msg: "加入购物车成功",
+                                          toastLength: Toast.LENGTH_SHORT,
+                                          gravity: ToastGravity.CENTER,
+                                          fontSize: 16.0);
                                     }
                                   },
                                 ),
