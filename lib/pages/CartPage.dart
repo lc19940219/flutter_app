@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappbrowser/flutter_inappbrowser.dart';
+import 'package:flutterapp/CartItem.dart';
 import 'package:flutterapp/model/ProductContentModel.dart';
 import 'package:flutterapp/service/ScreenAdapter.dart';
 import 'package:provider/provider.dart';
@@ -53,7 +54,7 @@ class _CartPageState extends State<CartPage> {
                   child: ListView.builder(
                     itemBuilder: (context, index) {
                       print(cartProvider.cartList[index]);
-                      return Text("111");
+                      return CartItem(cartProvider.cartList[index]);
                     },
                     itemCount: cartProvider.cartList.length,
                   ),

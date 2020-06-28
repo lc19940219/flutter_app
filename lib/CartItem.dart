@@ -33,12 +33,42 @@ class _CartItemState extends State<CartItem> {
               activeColor: Colors.red,
             ),
           ),
-Container(
-  child: ClipRRect(
-    borderRadius: BorderRadius.all(Radius.circular(5)),
-    child: FadeInImage.memoryNetwork(placeholder: kTransparentImage, image: "null"),
-  ),
-)
+          Container(
+            child: ClipRRect(
+              borderRadius: BorderRadius.all(Radius.circular(5)),
+              child: FadeInImage.memoryNetwork(
+                placeholder: kTransparentImage,
+                image: "null",
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+          Expanded(
+              child: Container(
+            padding: EdgeInsets.all(10),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Text(
+                  "1111111111111111111",
+                  maxLines: 2,
+                ),
+                Text("属性:111111111"),
+                Stack(
+                  children: <Widget>[
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text("￥1000", style: TextStyle(color: Colors.red)),
+                    ),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: Text("111"),
+                    )
+                  ],
+                )
+              ],
+            ),
+          ))
         ],
       ),
     );
