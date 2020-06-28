@@ -48,6 +48,16 @@ class _CartPageState extends State<CartPage> {
       body: cartProvider.cartList.length > 0
           ? Stack(
               children: <Widget>[
+                Container(
+                  margin: EdgeInsets.only(bottom: ScreenAdapter.setHeight(125)),
+                  child: ListView.builder(
+                    itemBuilder: (context, index) {
+                      print(cartProvider.cartList[index]);
+                      return Text("111");
+                    },
+                    itemCount: cartProvider.cartList.length,
+                  ),
+                ),
                 Positioned(
                   child: Container(
                     height: ScreenAdapter.setHeight(120),
@@ -80,12 +90,25 @@ class _CartPageState extends State<CartPage> {
                                 alignment: Alignment.centerRight,
                                 child: RaisedButton(
                                   child: Text("删除"),
-
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(5))),
+                                  color: Colors.red,
+                                  textColor: Colors.white,
+                                  onPressed: () {},
                                 ),
                               )
                             : Align(
                                 alignment: Alignment.centerRight,
-                                child: RaisedButton())
+                                child: RaisedButton(
+                                  child: Text("结算"),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(5))),
+                                  color: Colors.red,
+                                  onPressed: () {},
+                                  textColor: Colors.white,
+                                ))
                       ],
                     ),
                   ),
