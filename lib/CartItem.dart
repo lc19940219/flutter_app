@@ -38,7 +38,7 @@ class _CartItemState extends State<CartItem> {
               borderRadius: BorderRadius.all(Radius.circular(5)),
               child: FadeInImage.memoryNetwork(
                 placeholder: kTransparentImage,
-                image: "null",
+                image: "${this.widget._itemData["pic"]}",
                 fit: BoxFit.cover,
               ),
             ),
@@ -47,22 +47,23 @@ class _CartItemState extends State<CartItem> {
               child: Container(
             padding: EdgeInsets.all(10),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Text(
-                  "1111111111111111111",
+                  "${this.widget._itemData["title"]}",
                   maxLines: 2,
                 ),
-                Text("属性:111111111"),
+                Text("属性:${this.widget._itemData["selectValue"]}"),
                 Stack(
                   children: <Widget>[
                     Align(
                       alignment: Alignment.centerLeft,
-                      child: Text("￥1000", style: TextStyle(color: Colors.red)),
+                      child: Text("￥${this.widget._itemData["price"]}", style: TextStyle(color: Colors.red)),
                     ),
                     Align(
                       alignment: Alignment.centerRight,
-                      child: Text("111"),
+                      child: Text("${this.widget._itemData["price"]}"),
                     )
                   ],
                 )

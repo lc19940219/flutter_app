@@ -27,5 +27,11 @@ class CartProvide with ChangeNotifier {
   updata() {
     this.init();
   }
+  itemCountChange() {
+    Storage.setString("cartlist", json.encode(this._cartList));
+    //this.computeAllPrice();
+
+    notifyListeners();
+  }
 
 }

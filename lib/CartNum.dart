@@ -2,29 +2,36 @@ import 'package:flutter/material.dart';
 import 'package:flutterapp/model/ProductContentModel.dart';
 import 'package:flutterapp/service/ScreenAdapter.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:provider/provider.dart';
+
+import 'CartProvide.dart';
 
 class CartNum extends StatefulWidget {
-  ProductContentItem productContentItem;
+  Map _itemData;
 
-  CartNum(this.productContentItem);
+  CartNum(this._itemData);
 
   @override
   _CartNumState createState() => _CartNumState();
 }
 
 class _CartNumState extends State<CartNum> {
-  var _count;
 
+  Map _itemData;
   @override
   Widget build(BuildContext context) {
     ScreenAdapter.init(context);
-    this._count = this.widget.productContentItem.count ?? 1;
+    this._itemData = widget._itemData;
+    var cartProvider = Provider.of<CartProvide>(context);
+
     return Container(
       child: Row(
         children: <Widget>[
           InkWell(
             onTap: () {
-              if (this._count == 1) {
+              if (this._itemData['count'] > 1) {
+                this._itemData['count']--;
+              }else{
                 Fluttertoast.showToast(
                     msg: "不能再减了",
                     toastLength: Toast.LENGTH_SHORT,
@@ -32,13 +39,9 @@ class _CartNumState extends State<CartNum> {
                     timeInSecForIos: 1,
                     backgroundColor: Colors.white,
                     textColor: Colors.red);
-
-              }else{
-                setState(() {
-                  this._count--;
-                  this.widget.productContentItem.count = this._count;
-                });
               }
+              cartProvider.itemCountChange();
+
 
             },
             child: Container(
@@ -61,14 +64,12 @@ class _CartNumState extends State<CartNum> {
                 border: Border(
                     top: BorderSide(color: Colors.black26, width: 1),
                     bottom: BorderSide(color: Colors.black26, width: 1))),
-            child: Text("${this._count}"),
+            child: Text("${this._itemData['count']}"),
           ),
           InkWell(
             onTap: () {
-              setState(() {
-                this._count++;
-                this.widget.productContentItem.count = this._count;
-              });
+              this._itemData['count']++;
+              cartProvider.itemCountChange();
             },
             child: Container(
               alignment: Alignment.center,

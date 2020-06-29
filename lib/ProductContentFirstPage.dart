@@ -11,6 +11,7 @@ import 'package:provider/provider.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 import 'ApiManager.dart';
+import 'ProductCartNum.dart';
 import 'model/ProductContentModel.dart';
 
 class ProductContentFirstPage extends StatefulWidget {
@@ -154,7 +155,7 @@ class _ProductContentFirstPageState extends State<ProductContentFirstPage>
 
   void _attrBottomSheet() {
     showModalBottomSheet(
-        context: context,
+        context: this.context,
         builder: (context) {
           return StatefulBuilder(builder: (context, attrBottomSheetState) {
             return GestureDetector(
@@ -165,7 +166,7 @@ class _ProductContentFirstPageState extends State<ProductContentFirstPage>
               child: Stack(
                 children: <Widget>[
                   Container(
-                    width: MediaQuery.of(context).size.width,
+                    width: MediaQuery.of(this.context).size.width,
                     height: ScreenAdapter.setHeight(700),
                     child: Stack(
                       children: <Widget>[
@@ -185,7 +186,8 @@ class _ProductContentFirstPageState extends State<ProductContentFirstPage>
                                   ),
                                   Padding(
                                     padding: EdgeInsets.only(left: 20),
-                                    child: CartNum(this._productContent),
+                                    child:
+                                    ProductCartNum(this._productContent),
                                   )
                                 ],
                               ),
@@ -195,7 +197,7 @@ class _ProductContentFirstPageState extends State<ProductContentFirstPage>
                         Positioned(
                           child: Container(
                             height: ScreenAdapter.setHeight(100),
-                            width: MediaQuery.of(context).size.width,
+                            width: MediaQuery.of(this.context).size.width,
                             padding: EdgeInsets.all(5),
                             decoration: BoxDecoration(
                                 border: Border(
@@ -211,6 +213,7 @@ class _ProductContentFirstPageState extends State<ProductContentFirstPage>
                                     fun: () async {
                                       await CartService.add(
                                           this._productContent);
+                                      print("${this._productContent.toJson()["count"]}///////////");
 
                                       this.cartProvide.updata();
                                       Fluttertoast.showToast(
@@ -219,7 +222,7 @@ class _ProductContentFirstPageState extends State<ProductContentFirstPage>
                                           gravity: ToastGravity.CENTER,
                                           fontSize: 16.0);
 
-                                      Navigator.pop(context);
+                                      Navigator.pop(this.context);
                                     },
                                   ),
                                 ),
@@ -229,7 +232,7 @@ class _ProductContentFirstPageState extends State<ProductContentFirstPage>
                                     color: Colors.red,
                                     str: "立即购买",
                                     fun: () {
-                                      Navigator.pop(context);
+                                      Navigator.pop(this.context);
                                     },
                                   ),
                                 )
