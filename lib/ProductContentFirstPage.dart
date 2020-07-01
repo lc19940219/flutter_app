@@ -48,7 +48,7 @@ class _ProductContentFirstPageState extends State<ProductContentFirstPage>
   @override
   void dispose() {
     super.dispose();
-    this.productevent.cancle;
+    this.productevent.cancle();
   }
 
   void _initAttr() {

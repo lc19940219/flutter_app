@@ -6,12 +6,7 @@ import 'package:flutterapp/service/Storage.dart';
 
 class CartService {
   static add(item) async {
-    print(item);
-    print(item is Map);
-    print(item.runtimeType.toString());
-
     item = formatCartData(item);
-
     try {
       List list = json.decode(await Storage.getString("cartlist"));
 
@@ -58,22 +53,5 @@ class CartService {
     return data;
   }
 
-  static formatCartData2(Map item) {
-    String url = item["pic"];
-    url = ApiManager.api + url.replaceAll("\\", "/");
-    Map<String, dynamic> data = new Map();
-    data['_id'] = item["sId"];
-    data['title'] = item["title"];
-    if (item["price"] is int || item["price"] is double) {
-      data["price"] = item["price"];
-    } else {
-      data["price"] = double.parse(item["price"]);
-    }
-    data['pic'] = url;
-    data['selectValue'] = item["selectValue"];
-    data['count'] = item["count"];
-    print("${item["count"]}formatCartData2");
-    data['checked'] = true;
-    return data;
-  }
+
 }

@@ -71,9 +71,11 @@ class _CartPageState extends State<CartPage> {
                           child: Row(
                             children: <Widget>[
                               Checkbox(
-                                onChanged: (value) {},
+                                onChanged: (value) {
+                                  cartProvider.checkAllItem(value);
+                                },
                                 activeColor: Colors.red,
-                                value: true,
+                                value: cartProvider.isCheckedAll,
                               ),
                               this._isEdit
                                   ? Text("")
@@ -81,7 +83,7 @@ class _CartPageState extends State<CartPage> {
                                       style: TextStyle(color: Colors.red)),
                               this._isEdit
                                   ? Text("")
-                                  : Text("￥1111",
+                                  : Text("${cartProvider.allPrice}",
                                       style: TextStyle(color: Colors.red))
                             ],
                           ),
@@ -96,7 +98,9 @@ class _CartPageState extends State<CartPage> {
                                           BorderRadius.all(Radius.circular(5))),
                                   color: Colors.red,
                                   textColor: Colors.white,
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    cartProvider.removeItem();
+                                  },
                                 ),
                               )
                             : Align(

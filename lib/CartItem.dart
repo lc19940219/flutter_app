@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutterapp/CartNum.dart';
 import 'package:flutterapp/CartProvide.dart';
 import 'package:flutterapp/service/ScreenAdapter.dart';
 import 'package:provider/provider.dart';
@@ -14,11 +15,12 @@ class CartItem extends StatefulWidget {
 }
 
 class _CartItemState extends State<CartItem> {
+  Map _itemData;
   @override
   Widget build(BuildContext context) {
     CartProvide cartProvide = Provider.of<CartProvide>(context);
     ScreenAdapter.init(context);
-
+    this._itemData = widget._itemData;
     return Container(
       height: ScreenAdapter.setHeight(220),
       padding: EdgeInsets.all(5),
@@ -28,8 +30,11 @@ class _CartItemState extends State<CartItem> {
         children: <Widget>[
           Container(
             child: Checkbox(
-              value: false,
-              onChanged: (value) {},
+              value: this._itemData["checked"],
+              onChanged: (value) {
+                this._itemData["checked"] = !this._itemData["checked"];
+                cartProvide.itemChange();
+              },
               activeColor: Colors.red,
             ),
           ),
@@ -38,7 +43,7 @@ class _CartItemState extends State<CartItem> {
               borderRadius: BorderRadius.all(Radius.circular(5)),
               child: FadeInImage.memoryNetwork(
                 placeholder: kTransparentImage,
-                image: "${this.widget._itemData["pic"]}",
+                image: "${this._itemData["pic"]}",
                 fit: BoxFit.cover,
               ),
             ),
@@ -51,19 +56,20 @@ class _CartItemState extends State<CartItem> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Text(
-                  "${this.widget._itemData["title"]}",
+                  "${this._itemData["title"]}",
                   maxLines: 2,
                 ),
-                Text("属性:${this.widget._itemData["selectValue"]}"),
+                Text("属性:${this._itemData["selectValue"]}"),
                 Stack(
                   children: <Widget>[
                     Align(
                       alignment: Alignment.centerLeft,
-                      child: Text("￥${this.widget._itemData["price"]}", style: TextStyle(color: Colors.red)),
+                      child: Text("￥${this._itemData["price"]}",
+                          style: TextStyle(color: Colors.red)),
                     ),
                     Align(
                       alignment: Alignment.centerRight,
-                      child: Text("${this.widget._itemData["price"]}"),
+                      child: CartNum(this._itemData),
                     )
                   ],
                 )

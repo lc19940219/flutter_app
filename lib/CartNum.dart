@@ -25,6 +25,7 @@ class _CartNumState extends State<CartNum> {
     var cartProvider = Provider.of<CartProvide>(context);
 
     return Container(
+      width: ScreenAdapter.setWidth(190),
       child: Row(
         children: <Widget>[
           InkWell(
@@ -41,7 +42,6 @@ class _CartNumState extends State<CartNum> {
                     textColor: Colors.red);
               }
               cartProvider.itemCountChange();
-
 
             },
             child: Container(
