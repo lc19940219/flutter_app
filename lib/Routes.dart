@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutterapp/LoginPage.dart';
 import 'package:flutterapp/ProductContent.dart';
 import 'package:flutterapp/pages/Tabs.dart';
 
 import 'ProductListPage.dart';
+import 'RegistFirst.dart';
+import 'RegistThree.dart';
+import 'RegistTwo.dart';
 
 final routes = {
   "/": (context) => Tabs(),
@@ -10,6 +14,10 @@ final routes = {
       ProductListPage(arguments: arguments),
   "/ProductContent": (context, {arguments}) =>
       ProductContent(arguments: arguments),
+  '/Login': (context) => LoginPage(),
+  '/RegistFirst': (context) => RegistFirst(),
+  '/RegistTwo': (context, {arguments}) => RegistTwo(arguments: arguments),
+  '/RegistThree': (context, {arguments}) => RegistThree(arguments: arguments),
 };
 
 Route<dynamic> Function(RouteSettings settings) onGenerateRoute =
