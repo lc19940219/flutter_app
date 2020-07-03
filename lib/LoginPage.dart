@@ -34,12 +34,12 @@ class _LoginPageState extends State<LoginPage> {
                     fit: StackFit.loose,
                     children: <Widget>[
                       Container(
-                        height: ScreenAdapter.setHeight(299),
-                        margin: EdgeInsets.only(top: ScreenAdapter.setHeight(0.2)),
+                        height: ScreenAdapter.setHeight(300),
+
                         color: Colors.red,
                       ),
                       Container(
-                        height: ScreenAdapter.setHeight(301),
+                        height: ScreenAdapter.setHeight(300),
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.only(
