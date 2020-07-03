@@ -28,7 +28,7 @@ class _JDButtonState extends State<JDButton> {
         height: ScreenAdapter.setHeight(this.widget.height),
         margin: EdgeInsets.all(ScreenAdapter.setWidth(5)),
         padding: EdgeInsets.all(ScreenAdapter.setHeight(5)),
-
+        width: double.infinity,
         decoration: BoxDecoration(color: this.widget.color,
         borderRadius: BorderRadius.all(Radius.circular(ScreenAdapter.setHeight(10)))),
         child: FlatButton(
