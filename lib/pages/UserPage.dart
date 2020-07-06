@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutterapp/EventBus.dart';
 import 'package:flutterapp/JDButton.dart';
 import 'package:flutterapp/service/ScreenAdapter.dart';
+import 'package:flutterapp/service/UserServices.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class UserPage extends StatefulWidget {
@@ -9,7 +11,27 @@ class UserPage extends StatefulWidget {
 }
 
 class _UserPageState extends State<UserPage> {
-  bool isLogin = false;
+  bool isLogin= false;
+  List userInfo = [];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    eventBus.on<UserEvent>().listen((event) {
+      this._getUserinfo();
+    });
+    this._getUserinfo();
+  }
+
+  void _getUserinfo() async {
+    var isLogin = await UserServices.getUserLoginState();
+    var userInfo = await UserServices.getUserInfo();
+    setState(() {
+      this.userInfo = userInfo;
+      this.isLogin = isLogin;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +66,7 @@ class _UserPageState extends State<UserPage> {
                 SizedBox(
                   width: ScreenAdapter.setWidth(20),
                 ),
-                this.isLogin
+                !this.isLogin
                     ? InkWell(
                         onTap: () {},
                         child: Column(
@@ -62,7 +84,7 @@ class _UserPageState extends State<UserPage> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
                             Text(
-                              "xxxxxx",
+                              "${this.userInfo[0]['username']}",
                               style: TextStyle(color: Colors.white),
                             ),
                             SizedBox(
