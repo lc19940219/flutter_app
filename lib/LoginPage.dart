@@ -106,7 +106,9 @@ class _LoginPageState extends State<LoginPage> {
                       child: Text("忘记密码"),
                     ),
                     InkWell(
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.pushNamed(context, "/RegistFirst");
+                      },
                       child: Text("注册"),
                     )
                   ],

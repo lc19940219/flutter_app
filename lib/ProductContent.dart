@@ -10,11 +10,11 @@ import 'package:flutterapp/JDButton.dart';
 import 'package:flutterapp/LoadingWidget.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'Cart.dart';
-import 'file:///F:/flutter_Test/flutter_app/lib/ProductContentThreePage.dart';
 import 'package:flutterapp/service/ScreenAdapter.dart';
 import 'package:provider/provider.dart';
 
 import 'ProductContentFirstPage.dart';
+import 'ProductContentThreePage.dart';
 import 'ProductContentTwoPage.dart';
 import 'model/ProductContentModel.dart';
 
