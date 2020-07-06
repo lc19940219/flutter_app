@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutterapp/JDButton.dart';
 import 'package:flutterapp/JdTextFiled.dart';
 import 'package:flutterapp/service/ScreenAdapter.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import 'ApiManager.dart';
 
@@ -42,8 +43,9 @@ class _RegistTwoState extends State<RegistTwo> {
         });
       }
 
-      if (this.seconds == 0) {t.cancel();
-      if (mounted) {
+      if (this.seconds == 0) {
+        t.cancel();
+        if (mounted) {
           setState(() {
             this.sendCodeBtn = true;
           });
@@ -127,7 +129,7 @@ class _RegistTwoState extends State<RegistTwo> {
             ),
             JDButton(
               color: Colors.red,
-              fun: () {},
+              fun: validateCode,
               height: 100.0,
               str: "下一步",
             )
@@ -135,5 +137,28 @@ class _RegistTwoState extends State<RegistTwo> {
         ),
       ),
     );
+  }
+
+  validateCode() async {
+    if (this._yzm != null) {
+      var api = "${ApiManager.api}api/validateCode";
+      var resopnse =
+          await Dio().post(api, data: {"tel": this._tel, "code": this._yzm});
+
+      if (resopnse.data["success"]) {
+        Navigator.pushNamed(context, "/RegistThree",
+            arguments: {"tel": this._tel, "code": this._yzm});
+      } else {
+        Fluttertoast.showToast(
+            msg: "${resopnse.data["message"]}",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.CENTER);
+      }
+    } else {
+      Fluttertoast.showToast(
+          msg: "请输入正确的验证码",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER);
+    }
   }
 }
