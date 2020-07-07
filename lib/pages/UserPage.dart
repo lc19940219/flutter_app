@@ -11,7 +11,7 @@ class UserPage extends StatefulWidget {
 }
 
 class _UserPageState extends State<UserPage> {
-  bool isLogin= false;
+  bool isLogin = false;
   List userInfo = [];
 
   @override
@@ -68,7 +68,9 @@ class _UserPageState extends State<UserPage> {
                 ),
                 !this.isLogin
                     ? InkWell(
-                        onTap: () {},
+                        onTap: () {
+                          Navigator.pushNamed(context, "/Login");
+                        },
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
@@ -77,9 +79,7 @@ class _UserPageState extends State<UserPage> {
                         ),
                       )
                     : InkWell(
-                        onTap: () {
-                          Navigator.pushNamed(context, "/Login");
-                        },
+                        onTap: () {},
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[

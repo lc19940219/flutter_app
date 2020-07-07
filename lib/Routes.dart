@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutterapp/LoginPage.dart';
 import 'package:flutterapp/ProductContent.dart';
+import 'package:flutterapp/SearchPage.dart';
 import 'package:flutterapp/pages/Tabs.dart';
 
 import 'ProductListPage.dart';
@@ -18,6 +19,7 @@ final routes = {
   '/RegistFirst': (context) => RegistFirst(),
   '/RegistTwo': (context, {arguments}) => RegistTwo(arguments: arguments),
   '/RegistThree': (context, {arguments}) => RegistThree(arguments: arguments),
+  "/SearchPage": (context) => SearchPage(),
 };
 
 Route<dynamic> Function(RouteSettings settings) onGenerateRoute =

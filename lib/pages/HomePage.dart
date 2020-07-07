@@ -36,9 +36,7 @@ class _HomePageState extends State<HomePage>
       appBar: AppBar(
         title: InkWell(
           onTap: () {
-
-
-
+            Navigator.pushNamed(context, "/SearchPage");
           },
           child: Container(
             padding: EdgeInsets.only(left: ScreenAdapter.setWidth(20)),
