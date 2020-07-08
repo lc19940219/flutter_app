@@ -49,6 +49,8 @@ class _ProductListPageState extends State<ProductListPage> {
   @override
   void initState() {
     super.initState();
+    this._keywords = widget.arguments['keyword'];
+    this._textEditextcController.text = this._keywords;
     _scrollController = ScrollController();
     _scrollController.addListener(() {
       if (_scrollController.position.pixels >
