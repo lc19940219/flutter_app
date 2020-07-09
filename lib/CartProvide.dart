@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutterapp/service/Storage.dart';
 
-class CartProvide with ChangeNotifier {
+class  CartProvide with ChangeNotifier {
   List _cartList = []; //购物车数据
   bool _isCheckedAll = false; //全选
   double _allPrice = 0; //总价

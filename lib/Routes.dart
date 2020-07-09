@@ -1,4 +1,6 @@
+
 import 'package:flutter/material.dart';
+import 'package:flutterapp/CheckOutPage.dart';
 import 'package:flutterapp/LoginPage.dart';
 import 'package:flutterapp/ProductContent.dart';
 import 'package:flutterapp/SearchPage.dart';
@@ -20,6 +22,7 @@ final routes = {
   '/RegistTwo': (context, {arguments}) => RegistTwo(arguments: arguments),
   '/RegistThree': (context, {arguments}) => RegistThree(arguments: arguments),
   "/SearchPage": (context) => SearchPage(),
+  "/CheckOutPage": (context) => CheckOutPage()
 };
 
 Route<dynamic> Function(RouteSettings settings) onGenerateRoute =

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterapp/CartNum.dart';
@@ -29,7 +31,7 @@ class _ProductContentFirstPageState extends State<ProductContentFirstPage>
   List<Attr> _attrList = [];
   String _selectedValue;
   ProductContentItem _productContent;
-  var productevent;
+  StreamSubscription productevent;
   CartProvide cartProvide;
 
   @override
@@ -48,7 +50,7 @@ class _ProductContentFirstPageState extends State<ProductContentFirstPage>
   @override
   void dispose() {
     super.dispose();
-    this.productevent.cancle();
+    this.productevent.cancel();
   }
 
   void _initAttr() {

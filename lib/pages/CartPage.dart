@@ -2,8 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappbrowser/flutter_inappbrowser.dart';
 import 'package:flutterapp/CartItem.dart';
+import 'package:flutterapp/CartService.dart';
 import 'package:flutterapp/model/ProductContentModel.dart';
+import 'package:flutterapp/pages/CheckOutProvide.dart';
 import 'package:flutterapp/service/ScreenAdapter.dart';
+import 'package:flutterapp/service/UserServices.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
 import '../CartProvide.dart';
@@ -16,10 +20,11 @@ class CartPage extends StatefulWidget {
 class _CartPageState extends State<CartPage> {
   CartProvide cartProvider;
   bool _isEdit = false;
-
+  CheckOutProvide checkOutProvide;
   @override
   Widget build(BuildContext context) {
     cartProvider = Provider.of<CartProvide>(context);
+    checkOutProvide = Provider.of<CheckOutProvide>(context);
     print(cartProvider.cartList);
     return Scaffold(
       appBar: AppBar(
@@ -111,7 +116,7 @@ class _CartPageState extends State<CartPage> {
                                       borderRadius:
                                           BorderRadius.all(Radius.circular(5))),
                                   color: Colors.red,
-                                  onPressed: () {},
+                                  onPressed: checkout,
                                   textColor: Colors.white,
                                 ))
                       ],
@@ -127,5 +132,28 @@ class _CartPageState extends State<CartPage> {
               ),
             ),
     );
+  }
+
+  void checkout() async {
+    List list = await CartService.getSelectData();
+    if (list.length > 0) {
+      bool isLogin = await UserServices.getUserLoginState();
+      if (isLogin) {
+        checkOutProvide.changecheckoutList(list);
+
+        Navigator.pushNamed(context, "/CheckOutPage");
+      } else {
+        Fluttertoast.showToast(
+            msg: "请先登录",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.CENTER);
+        Navigator.pushNamed(context, "/Login");
+      }
+    } else {
+      Fluttertoast.showToast(
+          msg: "请先选择结算商品",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER);
+    }
   }
 }

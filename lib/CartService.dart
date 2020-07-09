@@ -53,5 +53,19 @@ class CartService {
     return data;
   }
 
-
+  static getSelectData() async {
+    List cartList = [];
+    List tempList = [];
+    try {
+      cartList = json.decode(await Storage.getString("cartlist"));
+    } catch (e) {
+      cartList = [];
+    }
+    for (int i = 0; i < cartList.length; i++) {
+      if (cartList[i]['checked'] == true) {
+        tempList.add(cartList[i]);
+      }
+    }
+    return tempList;
+  }
 }

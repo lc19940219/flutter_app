@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutterapp/CartProvide.dart';
+import 'package:flutterapp/pages/CheckOutProvide.dart';
 import 'package:provider/provider.dart';
 
 import 'Cart.dart';
@@ -13,6 +14,7 @@ class DemoApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => CartProvide()),
         ChangeNotifierProvider(create: (_) => Cart()),
+        ChangeNotifierProvider(create: (_) => CheckOutProvide()),
       ],
       child: MaterialApp(
         title: "Flutter_jd",
