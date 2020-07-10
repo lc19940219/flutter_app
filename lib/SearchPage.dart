@@ -65,6 +65,10 @@ class _SearchPageState extends State<SearchPage> {
                 this._keyword = value;
               });
             },
+            cursorColor: Colors.transparent,
+            cursorRadius: Radius.circular(0),
+            cursorWidth: 0,
+            enableInteractiveSelection:false,
             autofocus: true,
             decoration: InputDecoration(
                 hintText: "请输入",
