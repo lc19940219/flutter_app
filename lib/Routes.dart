@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutterapp/CheckOutPage.dart';
 import 'package:flutterapp/LoginPage.dart';
+import 'package:flutterapp/PayPage.dart';
 import 'package:flutterapp/ProductContent.dart';
 import 'package:flutterapp/SearchPage.dart';
 import 'package:flutterapp/pages/Tabs.dart';
@@ -22,7 +23,8 @@ final routes = {
   '/RegistTwo': (context, {arguments}) => RegistTwo(arguments: arguments),
   '/RegistThree': (context, {arguments}) => RegistThree(arguments: arguments),
   "/SearchPage": (context) => SearchPage(),
-  "/CheckOutPage": (context) => CheckOutPage()
+  "/CheckOutPage": (context) => CheckOutPage(),
+  "/PayPage": (context) => PayPage()
 };
 
 Route<dynamic> Function(RouteSettings settings) onGenerateRoute =

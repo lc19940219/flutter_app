@@ -161,7 +161,7 @@ class _CheckOutPageState extends State<CheckOutPage> {
                             child: JDButton(
                               color: Colors.red,
                               fun: () {
-
+                                Navigator.pushNamed(context, "/PayPage");
                               },
                               str: "结算",
                             ),
