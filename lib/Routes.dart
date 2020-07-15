@@ -27,7 +27,8 @@ final routes = {
   "/SearchPage": (context) => SearchPage(),
   "/CheckOutPage": (context) => CheckOutPage(),
   "/PayPage": (context) => PayPage(),
-  "/AddressAddPage": (context) => AddressAddPage(),
+  "/AddressAddPage": (context, {arguments}) =>
+      AddressAddPage(arguments: arguments),
   "/AddressListPage": (context) => AddressListPage(),
   "/AddressEditPage": (context) => AddressEditPage(),
 };

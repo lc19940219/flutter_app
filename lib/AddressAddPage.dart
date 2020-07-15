@@ -1,7 +1,14 @@
+import 'package:city_pickers/city_pickers.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutterapp/EventBus.dart';
 import 'package:flutterapp/JdTextFiled.dart';
 import 'package:flutterapp/service/ScreenAdapter.dart';
+import 'package:flutterapp/service/UserServices.dart';
 import 'package:transparent_image/transparent_image.dart';
+
+import 'ApiManager.dart';
+import 'SignService.dart';
 
 class AddressAddPage extends StatefulWidget {
   Map arguments;
@@ -74,14 +81,30 @@ class _AddressAddPageState extends State<AddressAddPage> {
                 // setState(() {
                 this.phone = value;
                 // });
-              },
+              }, controller: TextEditingController.fromValue(TextEditingValue(
+              text: this.phone,
+              selection: TextSelection.fromPosition(TextPosition(
+                offset: this.phone.length,
+                affinity: TextAffinity.downstream,
+              )),
+            )),
               prefixicon: Icons.people,
             ),
             SizedBox(
               height: ScreenAdapter.setHeight(20),
             ),
             InkWell(
-              onTap: () {},
+              onTap: () async {
+                Result result =
+                    await CityPickers.showFullPageCityPicker(context: context);
+//                        cancelWidget: Text("取消"),
+//                        confirmWidget: Text("确定"));
+                print(result);
+                setState(() {
+                  this.area =
+                      "${result.provinceName}/${result.cityName}/${result.areaName}";
+                });
+              },
               child: ListTile(
                 title:
                     this.area.length > 0 ? Text("${this.area}") : Text("省/市/区"),
@@ -102,7 +125,7 @@ class _AddressAddPageState extends State<AddressAddPage> {
               height: ScreenAdapter.setHeight(100),
             ),
             FlatButton(
-              onPressed: () {},
+              onPressed: this.isEdit ? _editAddress : addAddress,
               child: this.isEdit ? Text("更新") : Text("新增"),
               color: Colors.red,
               textColor: Colors.white,
@@ -111,5 +134,67 @@ class _AddressAddPageState extends State<AddressAddPage> {
         ),
       ),
     );
+  }
+
+  void addAddress() async {
+    List userinfo = await UserServices.getUserInfo();
+    Map tempMap = {
+      "uid": userinfo[0]["_id"],
+      "name": this.name,
+      "phone": this.phone,
+      "address": "${this.area} ${this.address}",
+      "salt": userinfo[0]["salt"]
+    };
+    String sign = SignService.getSign(tempMap);
+    var api = '${ApiManager.api}api/addAddress';
+    var response = await Dio().post(api, data: {
+      "uid": userinfo[0]["_id"],
+      "name": this.name,
+      "phone": this.phone,
+      "address": "${this.area} ${this.address}",
+      "sign": sign
+    });
+    print("${response.data}");
+    if (response.data["success"]) {
+      Navigator.pop(context);
+    }
+  }
+
+  void _editAddress() async{
+    List userinfo = await UserServices.getUserInfo();
+    var tempJson = {
+      "uid": userinfo[0]["_id"],
+      "id": widget.arguments["id"],
+      "name": this.name,
+      "phone": this.phone,
+      "address": "${this.area} ${this.address}",
+      "salt": userinfo[0]["salt"]
+    };
+
+    var sign = SignService.getSign(tempJson);
+    // print(sign);
+
+    var api = '${ApiManager.api}api/editAddress';
+    var response = await Dio().post(api, data: {
+      "uid": userinfo[0]["_id"],
+      "id": widget.arguments["id"],
+      "name": this.name,
+      "phone": this.phone,
+      "address": "${this.area} ${this.address}",
+      "sign": sign
+    });
+
+    print(response);
+    if (response.data["success"]) {
+      Navigator.pop(context);
+    }
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    eventBus.fire(AddressEvent("增加成功"));
+    eventBus.fire(CheckOutEvent("改收货地址成功"));
   }
 }

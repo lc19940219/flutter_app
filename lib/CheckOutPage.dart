@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 import 'ApiManager.dart';
+import 'EventBus.dart';
 import 'SignService.dart';
 import 'service/UserServices.dart';
 
@@ -24,19 +25,25 @@ class _CheckOutPageState extends State<CheckOutPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    getaddress();
+    getaddress(); eventBus.on<CheckOutEvent>().listen((event) {
+      this.getaddress();
+    });
   }
 
-  getaddress() async {
-    List userinfo = await UserServices.getUserInfo();
-    var tempJson = {"uid": userinfo[0]['_id'], "salt": userinfo[0]["salt"]};
-    var sign = SignService.getSign(tempJson);
-    var api =
-        "${ApiManager.api}/api/addressList?uid=${userinfo[0]['_id']}&sign=${sign}";
-    var response = await Dio().get(api);
+void  getaddress() async {
+  List userinfo = await UserServices.getUserInfo();
+  Map map = {"uid": userinfo[0]["_id"], "salt": userinfo[0]["salt"]};
+  String sign = SignService.getSign(map);
+
+  var api =
+      "${ApiManager.api}api/oneAddressList?uid=${userinfo[0]["_id"]}&sign=${sign}";
+
+  var response = await Dio().get(api);
+  if (mounted) {
     setState(() {
-      this._addressList = response.data["result"];
+      this._addressList = response.data['result'];
     });
+  }
   }
 
   @override
@@ -63,11 +70,11 @@ class _CheckOutPageState extends State<CheckOutPage> {
                       title: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Text("11111"),
+                          Text("${this._addressList[0]['name']}  ${this._addressList[0]['phone']}"),
                           SizedBox(
                             height: ScreenAdapter.setHeight(30),
                           ),
-                          Text("11111"),
+                          Text("${this._addressList[0]['address']}"),
                         ],
                       ),
                       trailing: Icon(Icons.more),

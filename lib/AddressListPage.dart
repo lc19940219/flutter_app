@@ -7,6 +7,7 @@ import 'package:flutterapp/service/ScreenAdapter.dart';
 import 'package:flutterapp/service/UserServices.dart';
 import 'package:transparent_image/transparent_image.dart';
 
+import 'EventBus.dart';
 import 'SignService.dart';
 
 class AddressListPage extends StatefulWidget {
@@ -24,16 +25,65 @@ class _AddressListPageState extends State<AddressListPage> {
     getAddressData();
   }
 
-  getAddressData() async {
+  void getAddressData() async {
     List userinfo = await UserServices.getUserInfo();
     var tempJson = {"uid": userinfo[0]['_id'], "salt": userinfo[0]["salt"]};
     var sign = SignService.getSign(tempJson);
+
     var api =
-        "${ApiManager.api}/api/addressList?uid=${userinfo[0]['_id']}&sign=${sign}";
-    var response = await Dio().get(api);
+        "${ApiManager.api}api/addressList?uid=${userinfo[0]['_id']}&sign=${sign}";
+    var respone = await Dio().get(api);
     setState(() {
-      this.addressList = response.data["result"];
+      this.addressList = respone.data['result'];
     });
+  }
+
+  dispose() {
+    super.dispose();
+    eventBus.fire(new CheckOutEvent('改收货地址成功...'));
+  }
+
+  _showAlertDialog(id) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text("提示信息"),
+            content: Text("您确定要删除吗"),
+            actions: <Widget>[
+              FlatButton(
+                child: Text("取消"),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+              FlatButton(
+                child: Text("确定"),
+                onPressed: () async {
+                  //执行删除操作
+                  this._delAddress(id);
+                  Navigator.pop(context);
+                },
+              )
+            ],
+          );
+        });
+  }
+
+  _delAddress(id) async {
+    List userinfo = await UserServices.getUserInfo();
+    var tempJson = {
+      "uid": userinfo[0]["_id"],
+      "id": id,
+      "salt": userinfo[0]["salt"]
+    };
+
+    var sign = SignService.getSign(tempJson);
+
+    var api = '${ApiManager.api}api/deleteAddress';
+    var response = await Dio()
+        .post(api, data: {"uid": userinfo[0]["_id"], "id": id, "sign": sign});
+    this.getAddressData(); //
   }
 
   @override
@@ -49,36 +99,66 @@ class _AddressListPageState extends State<AddressListPage> {
         children: <Widget>[
           this.addressList.length > 0
               ? Expanded(
+                  flex: 1,
                   child: ListView.builder(
-                  padding:
-                      EdgeInsets.only(bottom: ScreenAdapter.setHeight(110)),
-                  itemBuilder: (context, index) {
-                    return Column(
-                      children: <Widget>[
-                        ListTile(
-                          title: Text(
-                              "${this.addressList[index]["name"]}  ${this.addressList[index]["phone"]}"),
-                          subtitle:
-                              Text("${this.addressList[index]["address"]} "),
-                          leading:
-                              this.addressList[index]["default_address"] == 1
-                                  ? Icon(Icons.check, color: Colors.red)
-                                  : kTransparentImage,
-                          trailing: InkWell(
-                            onTap: () {
-                              Navigator.pushNamed(context, "/AddressEditPage");
-                            },
-                            child: Icon(
-                              Icons.edit,
-                              color: Colors.blue,
+                    padding:
+                        EdgeInsets.only(bottom: ScreenAdapter.setHeight(110)),
+                    itemBuilder: (context, index) {
+                      return Column(
+                        children: <Widget>[
+                          ListTile(
+                            title: InkWell(
+                              child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Text(
+                                        "${this.addressList[index]["name"]}  ${this.addressList[index]["phone"]}"),
+                                    SizedBox(height: 10),
+                                    Text(
+                                        "${this.addressList[index]["address"]}"),
+                                  ]),
+                              onTap: () {
+                                _changeDefaultAddress(
+                                    this.addressList[index]["_id"]);
+                              },
+                              onLongPress: () {
+                                this._showAlertDialog(
+                                    this.addressList[index]["_id"]);
+                              },
+                            ),
+                            leading:
+                                this.addressList[index]["default_address"] == 1
+                                    ? Icon(Icons.check, color: Colors.red)
+                                    : null,
+                            trailing: InkWell(
+                              onTap: () {
+                                Navigator.pushNamed(
+                                    context, "/AddressEditPage");
+                              },
+                              child: IconButton(
+                                icon: Icon(Icons.edit, color: Colors.blue),
+                                onPressed: () {
+                                  Navigator.pushNamed(
+                                      context, "/AddressAddPage",
+                                      arguments: {
+                                        "isEdit": true,
+                                        "id": this.addressList[index]["_id"],
+                                        "name": this.addressList[index]["name"],
+                                        "phone": this.addressList[index]
+                                            ["phone"],
+                                        "address": this.addressList[index]
+                                            ["address"],
+                                      });
+                                },
+                              ),
                             ),
                           ),
-                        )
-                      ],
-                    );
-                  },
-                  itemCount: this.addressList.length,
-                ))
+                          Divider()
+                        ],
+                      );
+                    },
+                    itemCount: this.addressList.length,
+                  ))
               : Center(
                   child: Text("请添加地址"),
                 ),
@@ -98,5 +178,22 @@ class _AddressListPageState extends State<AddressListPage> {
         ],
       )),
     );
+  }
+
+  void _changeDefaultAddress(id) async {
+    List userinfo = await UserServices.getUserInfo();
+
+    var tempJson = {
+      "uid": userinfo[0]['_id'],
+      "id": id,
+      "salt": userinfo[0]["salt"]
+    };
+
+    var sign = SignService.getSign(tempJson);
+
+    var api = '${ApiManager.api}api/changeDefaultAddress';
+    var response = await Dio()
+        .post(api, data: {"uid": userinfo[0]['_id'], "id": id, "sign": sign});
+    Navigator.pop(context);
   }
 }
