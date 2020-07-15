@@ -15,7 +15,7 @@ class JdTextFiled extends StatelessWidget {
       {this.labeltext = "",
       this.hinttext = "",
       this.height = 100.0,
-      this.prefixicon = Icons.add,
+      this.prefixicon = null,
       this.onchange = null,
       this.obscureText = false,
       this.maxlines = 1,

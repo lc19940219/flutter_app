@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterapp/JDButton.dart';
@@ -5,6 +6,10 @@ import 'package:flutterapp/pages/CheckOutProvide.dart';
 import 'package:flutterapp/service/ScreenAdapter.dart';
 import 'package:provider/provider.dart';
 import 'package:transparent_image/transparent_image.dart';
+
+import 'ApiManager.dart';
+import 'SignService.dart';
+import 'service/UserServices.dart';
 
 class CheckOutPage extends StatefulWidget {
   @override
@@ -19,6 +24,19 @@ class _CheckOutPageState extends State<CheckOutPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    getaddress();
+  }
+
+  getaddress() async {
+    List userinfo = await UserServices.getUserInfo();
+    var tempJson = {"uid": userinfo[0]['_id'], "salt": userinfo[0]["salt"]};
+    var sign = SignService.getSign(tempJson);
+    var api =
+        "${ApiManager.api}/api/addressList?uid=${userinfo[0]['_id']}&sign=${sign}";
+    var response = await Dio().get(api);
+    setState(() {
+      this._addressList = response.data["result"];
+    });
   }
 
   @override
@@ -37,11 +55,9 @@ class _CheckOutPageState extends State<CheckOutPage> {
           children: <Widget>[
             this._addressList.length > 0
                 ? InkWell(
-                    onTap: () {},
-                    child: Text("1"),
-                  )
-                : InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.pushNamed(context, "/AddressListPage");
+                    },
                     child: ListTile(
                       leading: Icon(Icons.local_activity),
                       title: Column(
@@ -56,6 +72,20 @@ class _CheckOutPageState extends State<CheckOutPage> {
                       ),
                       trailing: Icon(Icons.more),
                     ),
+                  )
+                : InkWell(
+                    child: ListTile(
+                      leading: Icon(Icons.local_activity),
+                      title: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[Text("请添加地址")],
+                      ),
+                      trailing: Icon(Icons.more),
+                    ),
+                    onTap: () {
+                      Navigator.pushNamed(context, "/AddressAddPage",
+                          arguments: {"isEdit": false});
+                    },
                   ),
             Divider(),
             Expanded(

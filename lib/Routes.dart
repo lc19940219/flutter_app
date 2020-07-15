@@ -1,5 +1,7 @@
-
 import 'package:flutter/material.dart';
+import 'package:flutterapp/AddressAddPage.dart';
+import 'package:flutterapp/AddressEdit.dart';
+import 'package:flutterapp/AddressListPage.dart';
 import 'package:flutterapp/CheckOutPage.dart';
 import 'package:flutterapp/LoginPage.dart';
 import 'package:flutterapp/PayPage.dart';
@@ -24,7 +26,10 @@ final routes = {
   '/RegistThree': (context, {arguments}) => RegistThree(arguments: arguments),
   "/SearchPage": (context) => SearchPage(),
   "/CheckOutPage": (context) => CheckOutPage(),
-  "/PayPage": (context) => PayPage()
+  "/PayPage": (context) => PayPage(),
+  "/AddressAddPage": (context) => AddressAddPage(),
+  "/AddressListPage": (context) => AddressListPage(),
+  "/AddressEditPage": (context) => AddressEditPage(),
 };
 
 Route<dynamic> Function(RouteSettings settings) onGenerateRoute =
