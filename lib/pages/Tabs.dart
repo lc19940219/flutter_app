@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'CartPage.dart';
 import 'CategoryPage.dart';
 import 'HomePage.dart';
+import 'Test.dart';
 import 'UserPage.dart';
 
 class Tabs extends StatefulWidget {
@@ -13,7 +14,7 @@ class Tabs extends StatefulWidget {
 class _TabsState extends State<Tabs> {
   int currentIndex = 0;
   PageController _pageController;
-  List<Widget> list = [HomePage(), CategoryPage(), CartPage(), UserPage()];
+  List<Widget> list = [HomePage(), CategoryPage(), CartPage(), UserPage(),TestPage()];
 
   @override
   void initState() {
@@ -43,6 +44,8 @@ class _TabsState extends State<Tabs> {
           BottomNavigationBarItem(
               icon: Icon(Icons.shopping_cart), title: Text("购物车")),
           BottomNavigationBarItem(icon: Icon(Icons.people), title: Text("我的")),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.people), title: Text("Test")),
         ],
         fixedColor: Colors.red,
         type: BottomNavigationBarType.fixed,

@@ -22,6 +22,9 @@ class _AddressListPageState extends State<AddressListPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    eventBus.on<AddressEvent>().listen((event) {
+      getAddressData();
+    });
     getAddressData();
   }
 
@@ -98,67 +101,61 @@ class _AddressListPageState extends State<AddressListPage> {
           child: Stack(
         children: <Widget>[
           this.addressList.length > 0
-              ? Expanded(
-                  flex: 1,
-                  child: ListView.builder(
-                    padding:
-                        EdgeInsets.only(bottom: ScreenAdapter.setHeight(110)),
-                    itemBuilder: (context, index) {
-                      return Column(
-                        children: <Widget>[
-                          ListTile(
-                            title: InkWell(
-                              child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    Text(
-                                        "${this.addressList[index]["name"]}  ${this.addressList[index]["phone"]}"),
-                                    SizedBox(height: 10),
-                                    Text(
-                                        "${this.addressList[index]["address"]}"),
-                                  ]),
-                              onTap: () {
-                                _changeDefaultAddress(
-                                    this.addressList[index]["_id"]);
+              ? ListView.builder(
+                  padding:
+                      EdgeInsets.only(bottom: ScreenAdapter.setHeight(110)),
+                  itemBuilder: (context, index) {
+                    return Column(
+                      children: <Widget>[
+                        ListTile(
+                          title: InkWell(
+                            child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Text(
+                                      "${this.addressList[index]["name"]}  ${this.addressList[index]["phone"]}"),
+                                  SizedBox(height: 10),
+                                  Text("${this.addressList[index]["address"]}"),
+                                ]),
+                            onTap: () {
+                              _changeDefaultAddress(
+                                  this.addressList[index]["_id"]);
+                            },
+                            onLongPress: () {
+                              this._showAlertDialog(
+                                  this.addressList[index]["_id"]);
+                            },
+                          ),
+                          leading:
+                              this.addressList[index]["default_address"] == 1
+                                  ? Icon(Icons.check, color: Colors.red)
+                                  : null,
+                          trailing: InkWell(
+                            onTap: () {
+                              Navigator.pushNamed(context, "/AddressEditPage");
+                            },
+                            child: IconButton(
+                              icon: Icon(Icons.edit, color: Colors.blue),
+                              onPressed: () {
+                                Navigator.pushNamed(context, "/AddressAddPage",
+                                    arguments: {
+                                      "isEdit": true,
+                                      "id": this.addressList[index]["_id"],
+                                      "name": this.addressList[index]["name"],
+                                      "phone": this.addressList[index]["phone"],
+                                      "address": this.addressList[index]
+                                          ["address"],
+                                    });
                               },
-                              onLongPress: () {
-                                this._showAlertDialog(
-                                    this.addressList[index]["_id"]);
-                              },
-                            ),
-                            leading:
-                                this.addressList[index]["default_address"] == 1
-                                    ? Icon(Icons.check, color: Colors.red)
-                                    : null,
-                            trailing: InkWell(
-                              onTap: () {
-                                Navigator.pushNamed(
-                                    context, "/AddressEditPage");
-                              },
-                              child: IconButton(
-                                icon: Icon(Icons.edit, color: Colors.blue),
-                                onPressed: () {
-                                  Navigator.pushNamed(
-                                      context, "/AddressAddPage",
-                                      arguments: {
-                                        "isEdit": true,
-                                        "id": this.addressList[index]["_id"],
-                                        "name": this.addressList[index]["name"],
-                                        "phone": this.addressList[index]
-                                            ["phone"],
-                                        "address": this.addressList[index]
-                                            ["address"],
-                                      });
-                                },
-                              ),
                             ),
                           ),
-                          Divider()
-                        ],
-                      );
-                    },
-                    itemCount: this.addressList.length,
-                  ))
+                        ),
+                        Divider()
+                      ],
+                    );
+                  },
+                  itemCount: this.addressList.length,
+                )
               : Center(
                   child: Text("请添加地址"),
                 ),
@@ -168,7 +165,8 @@ class _AddressListPageState extends State<AddressListPage> {
             height: ScreenAdapter.setHeight(110),
             child: FlatButton(
               onPressed: () {
-                Navigator.pushNamed(context, "/AddressAddPage");
+                Navigator.pushNamed(context, "/AddressAddPage",
+                    arguments: {"isEdit": false});
               },
               child: Text("新增"),
               textColor: Colors.white,

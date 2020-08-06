@@ -8,6 +8,7 @@ import 'package:flutterapp/PayPage.dart';
 import 'package:flutterapp/ProductContent.dart';
 import 'package:flutterapp/SearchPage.dart';
 import 'package:flutterapp/pages/Tabs.dart';
+import 'package:flutterapp/widget/AnimatedAlignPage.dart';
 
 import 'ProductListPage.dart';
 import 'RegistFirst.dart';
@@ -31,6 +32,7 @@ final routes = {
       AddressAddPage(arguments: arguments),
   "/AddressListPage": (context) => AddressListPage(),
   "/AddressEditPage": (context) => AddressEditPage(),
+  "/AnimatedAlignPage": (context) => AnimatedAlignPage(),
 };
 
 Route<dynamic> Function(RouteSettings settings) onGenerateRoute =
